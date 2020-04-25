@@ -55,8 +55,8 @@ class LumiCenter(val imageView: ImageView) {
         var acc = 0.0
         for (x in 0 until width - 1) {
             for (y in 0 until height - 1) {
-//                acc += extractLumi(bitmap.getPixel(x, y)) * mult(x,y)
-                acc += extractLumi(bitmap.getPixel(x, y))
+                acc += extractLumi(bitmap.getPixel(x, y)) * mult(x,y)
+//                acc += extractLumi(bitmap.getPixel(x, y))
             }
         }
         return acc
