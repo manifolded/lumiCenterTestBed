@@ -1,15 +1,12 @@
 package com.example.lumicentertestbed
 
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.util.Log
-import android.widget.ImageView
 
-class LumiCenter(private val imageView: ImageView) {
-    private val width: Int = imageView.width
-    private val height: Int = imageView.height
-    private val bitmap: Bitmap = convertImageViewToBitmap(imageView)
+class LumiCenter(private val bitmap: Bitmap) {
+    private val width = bitmap.width
+    private val height = bitmap.height
 
     companion object {
         private const val TAG = "LumiCenter"
@@ -18,12 +15,6 @@ class LumiCenter(private val imageView: ImageView) {
 //    inline fun itFromIndices(x: Int, y: Int): Int {
 //        return width * y + x
 //    }
-
-    private fun convertImageViewToBitmap(imageView: ImageView): Bitmap {
-        // convert to Bitmap
-        // https://stackoverflow.com/questions/4715044/android-how-to-convert-whole-imageview-to-bitmap
-        return (imageView.drawable as BitmapDrawable).bitmap
-    }
 
     // Convert Color data to a simple number.
     //  If you want the code to be sensitive to a different color, make that change here.
