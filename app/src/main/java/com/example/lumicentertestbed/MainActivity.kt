@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             val bitmap: Bitmap = convertDrawableToBitmap(drawable, width, height)
             val lumiCenter = LumiCenter(bitmap)
 
-            val stats = lumiCenter.computeStats(100)
+            val stats = lumiCenter.computeStats(10)
 
 //            Log.d(TAG, "sumOnVals: ${stats[0]}")
 //            Log.d(TAG, "x-center: ${stats[1]}")
