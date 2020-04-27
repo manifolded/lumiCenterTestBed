@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">lumiCenterTestBed</string>
     <string name="lowerleftblob01_desc">A test image for benchmarking peak finding algorithms.</string>
+    <string name="imageDesc">Holder for the image being analyzed.</string>
 </resources>

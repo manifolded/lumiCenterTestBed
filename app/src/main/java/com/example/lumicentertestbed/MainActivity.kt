@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -31,25 +32,26 @@ class MainActivity : AppCompatActivity() {
             // ----------------------------------------
             val height: Int = imageView.height
             val width: Int = imageView.width
-            val bitmap = convertDrawableToBitmap(drawable, width, height)
+            val bitmap: Bitmap = convertDrawableToBitmap(drawable, width, height)
             val lumiCenter = LumiCenter(bitmap)
 
-            val sumOnVals: Long = lumiCenter.sumOverImage { _, _ -> 1 }
-            Log.d(TAG, "sumOnVals = $sumOnVals")
-            val xEst: Long = (lumiCenter.sumOverImage { x: Int, _ -> x}) / sumOnVals
-            Log.d(TAG, "x-center: $xEst")
-            val yEst: Long = (lumiCenter.sumOverImage { _, y: Int -> y}) / sumOnVals
-            Log.d(TAG, "y-center: $yEst")
+            val stats = lumiCenter.computeStats(60)
 
-            analysisResults.text = "$xEst, $yEst"
+            Log.d(TAG, "sumOnVals: ${stats[0]}")
+            Log.d(TAG, "x-center: ${stats[1]}")
+            Log.d(TAG, "y-center: ${stats[2]}")
+            // write output to TextView
+//            analysisResults.text = "${stats[1]}, ${stats[2]}"
+            analysisResults.text = "%d, %.0f\n%d, %.0f"
+                .format(stats[1], sqrt(stats[3].toDouble()), stats[2], sqrt(stats[4].toDouble()))
         }
     }
 
     private fun convertDrawableToBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
         // method appropriate for drawables
         // https://stackoverflow.com/questions/33181417/convert-gradientdrawable-to-bitmap
-        var bitmap: Bitmap = Bitmap.createBitmap(imageView.width, imageView.height, Bitmap.Config.ARGB_8888)
-        val canvas: Canvas = Canvas(bitmap)
+        val bitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
         drawable.draw(canvas)
         return bitmap
     }
