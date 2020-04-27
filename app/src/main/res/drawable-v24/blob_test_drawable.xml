@@ -11,10 +11,14 @@
     </item>
 
     <item
-        android:width="600px"
-        android:height="600px">
+        android:width="200px"
+        android:height="200px"
+        android:left="100px"
+        android:top="800px">
         <shape android:shape="oval">
-            <solid android:color="@android:color/white"/>
+<!--            <solid android:color="@android:color/white"/>-->
+            <solid android:color="@android:color/holo_orange_dark"/>
+<!--            <solid android:color="@android:color/holo_red_dark"/>-->
         </shape>
     </item>
 

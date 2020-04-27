@@ -16,16 +16,16 @@ class LumiCenter(private val bitmap: Bitmap) {
 
     // Convert Color data to a simple number.
     //  If you want the code to be sensitive to a different color, make that change here.
-    fun extractLumi(color: Int): Int {
+    private fun extractLumi(color: Int): Int {
         return Color.red(color)
     }
 
-    fun sumOverImage(stride: Int, mult: (Int, Int) -> Int): Long {
+    private fun sumOverImage(stride: Int, multiplier: (Int, Int) -> Int): Long {
         var acc: Long = 0
         for (x in 0 until width - 1 step stride) {
             for (y in 0 until height - 1 step stride) {
                 val colorValue = extractLumi(bitmap.getPixel(x, y))
-                acc += colorValue * mult(x, y)
+                acc += colorValue * multiplier(x, y)
             }
         }
         return acc
