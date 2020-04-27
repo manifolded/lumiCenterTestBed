@@ -35,11 +35,12 @@ class MainActivity : AppCompatActivity() {
             val bitmap: Bitmap = convertDrawableToBitmap(drawable, width, height)
             val lumiCenter = LumiCenter(bitmap)
 
-            val stats = lumiCenter.computeStats(60)
+            val stats = lumiCenter.computeStats(100)
 
-            Log.d(TAG, "sumOnVals: ${stats[0]}")
-            Log.d(TAG, "x-center: ${stats[1]}")
-            Log.d(TAG, "y-center: ${stats[2]}")
+//            Log.d(TAG, "sumOnVals: ${stats[0]}")
+//            Log.d(TAG, "x-center: ${stats[1]}")
+//            Log.d(TAG, "y-center: ${stats[2]}")
+
             // write output to TextView
 //            analysisResults.text = "${stats[1]}, ${stats[2]}"
             analysisResults.text = "%d, %.0f\n%d, %.0f"
