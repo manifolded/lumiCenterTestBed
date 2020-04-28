@@ -33,18 +33,26 @@ class MainActivity : AppCompatActivity() {
             val height: Int = imageView.height
             val width: Int = imageView.width
             val bitmap: Bitmap = convertDrawableToBitmap(drawable, width, height)
-            val lumiCenter = LumiCenter(bitmap)
 
-            val stats = lumiCenter.computeStats(10)
+//            val lumiCenter = LumiCenter(bitmap)
+//            val stats = lumiCenter.computeStats(10)
+//
+////            Log.d(TAG, "sumOnVals: ${stats[0]}")
+////            Log.d(TAG, "x-center: ${stats[1]}")
+////            Log.d(TAG, "y-center: ${stats[2]}")
+//
+//            // write output to TextView
+////            analysisResults.text = "${stats[1]}, ${stats[2]}"
+//            analysisResults.text = "%d, %.0f\n%d, %.0f"
+//                .format(stats[1], sqrt(stats[3].toDouble()), stats[2], sqrt(stats[4].toDouble()))
 
-//            Log.d(TAG, "sumOnVals: ${stats[0]}")
-//            Log.d(TAG, "x-center: ${stats[1]}")
-//            Log.d(TAG, "y-center: ${stats[2]}")
 
-            // write output to TextView
-//            analysisResults.text = "${stats[1]}, ${stats[2]}"
-            analysisResults.text = "%d, %.0f\n%d, %.0f"
-                .format(stats[1], sqrt(stats[3].toDouble()), stats[2], sqrt(stats[4].toDouble()))
+            val analyzer = IterativeExplorer(bitmap)
+            val params = analyzer.iterateParams(50, 0.1, 30)
+            analysisResults.text = "${params[0]} ${params[2]}\n${params[1]} ${params[3]}"
+
+
+
         }
     }
 
