@@ -10,13 +10,6 @@ class IterativeExplorer(private val bitmap: Bitmap) {
 //    private var currentParams: Map<String, Int> =
 //        mutableMapOf("xCenter" to 540, "yCenter" to 960, "xWidth" to 100, "yWidth" to 100,
 //            "amplitude" to 0x80, "background" to 0x00)
-    // Maps in Kotlin, with their fucking implicit default values and null receivers and safe
-    // assignments are fucking nightmare and I give up.  You fucks deserve to burn in hell.
-    // I'm going back to using a fucking functional array.
-    //   You know how we always say to prefer compile time errors to runtime errors.  Well now I
-    // know it's a lie.  If Map would just shut the fuck up and compile I could accept a runtime
-    // error if I try to access a non-existent pair.
-
 
     // start the params with a patch that covers the whole screen
     private var origParams: Array<Int> =  arrayOf(540, 960, 540, 960, 0x80, 0x00)
