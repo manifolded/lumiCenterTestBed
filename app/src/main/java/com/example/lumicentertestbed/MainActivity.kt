@@ -48,11 +48,8 @@ class MainActivity : AppCompatActivity() {
 
 
             val analyzer = IterativeExplorer(bitmap)
-            val params = analyzer.iterateParams(50, 0.1, 30)
+            val params = analyzer.iterateParams(100, 0.00001, 30, 1)
             analysisResults.text = "${params[0]} ${params[2]}\n${params[1]} ${params[3]}"
-
-
-
         }
     }
 
