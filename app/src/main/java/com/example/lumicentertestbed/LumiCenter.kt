@@ -2,6 +2,16 @@ package com.example.lumicentertestbed
 
 import android.graphics.*
 
+data class LumiResult(
+    val centerX: Long,
+    val centerY: Long,
+    val stdX: Long,
+    val stdY: Long,
+    val corrXY: Long
+)
+
+typealias LumiResultHandler = (LumiResult) -> Unit
+
 class LumiCenter(private val bitmap: Bitmap) {
     private val width = bitmap.width
     private val height = bitmap.height
@@ -31,7 +41,7 @@ class LumiCenter(private val bitmap: Bitmap) {
 //        return acc
 //    }
 
-    fun computeStats(stride: Int) : Array<Long> {
+    fun computeStats(stride: Int, callback: LumiResultHandler) {
         val result = Array<Long>(6 ) {0}
 
         // sum stats over image
@@ -58,7 +68,15 @@ class LumiCenter(private val bitmap: Bitmap) {
         result[4] -= result[2]*result[2]
         result[5] -= result[1]*result[2]
 
-        return result
+        val lresult = LumiResult(
+            centerX = result[1],
+            centerY = result[2],
+            stdX = Math.sqrt(result[3].toDouble()).toLong(),
+            stdY = Math.sqrt(result[4].toDouble()).toLong(),
+            corrXY = Math.sqrt(result[5].toDouble()).toLong()
+        )
+
+        callback.invoke(lresult)
 
 //        result[0] = sumOverImage(stride) { _, _ -> 1 }
 //        result[1] = (sumOverImage(stride) { x: Int, _ -> x}) / result[0]

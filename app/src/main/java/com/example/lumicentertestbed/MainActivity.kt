@@ -7,11 +7,15 @@ import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.Executors
 import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity() {
+
+    private val executor by lazy { Executors.newSingleThreadExecutor() }
     companion object {
         private const val TAG = "lumiCenterTestBed"
     }
@@ -19,6 +23,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        window.decorView.apply {
+            // Hide both the navigation bar and the status bar.
+            // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+            // a general rule, you should design your app to hide the status bar whenever you
+            // hide the navigation bar.
+            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
 
         imageView.post {
             // method for importing images
@@ -34,26 +46,41 @@ class MainActivity : AppCompatActivity() {
             val width: Int = imageView.width
             val bitmap: Bitmap = convertDrawableToBitmap(drawable, width, height)
 
-//            val lumiCenter = LumiCenter(bitmap)
-//            val stats = lumiCenter.computeStats(10)
+            // =================================================================================
+            val lumiCenter = LumiCenter(bitmap)
+
+            executor.execute {
+                lumiCenter.computeStats(30) { stats ->
+                    runOnUiThread {
+                        analysisResults.text = "%d, %d\n%d, %d"
+                            .format(stats.centerX, stats.stdX, stats.centerY, stats.stdY)
+                    }
+                }
+            }
+
+
+
+
+
+//            Log.d(TAG, "sumOnVals: ${stats[0]}")
+//            Log.d(TAG, "x-center: ${stats[1]}")
+//            Log.d(TAG, "y-center: ${stats[2]}")
+
+            // write output to TextView
+//            analysisResults.text = "${stats[1]}, ${stats[2]}"
+
+
+            // =================================================================================
+            // For running IterativeExplorer conventionally
+//            val analyzer = IterativeExplorer(bitmap)
+//            val origParams: Array<Int> =  arrayOf(540, 960, 400, 400, 0x80, 0x00)
+//            val finalParams=
+//                analyzer.iterateParams(100, 0.3, 30, 2, 2)
 //
-////            Log.d(TAG, "sumOnVals: ${stats[0]}")
-////            Log.d(TAG, "x-center: ${stats[1]}")
-////            Log.d(TAG, "y-center: ${stats[2]}")
-//
-//            // write output to TextView
-////            analysisResults.text = "${stats[1]}, ${stats[2]}"
-//            analysisResults.text = "%d, %.0f\n%d, %.0f"
-//                .format(stats[1], sqrt(stats[3].toDouble()), stats[2], sqrt(stats[4].toDouble()))
+//            analysisResults.text = "${finalParams[0]} ${finalParams[2]}\n${finalParams[1]} ${finalParams[3]}"
 
-
-            val analyzer = IterativeExplorer(bitmap)
-            val finalParams = analyzer.iterateParams(100, 0.3, 10, 2, 1)
-
-            analysisResults.text = "${finalParams[0]} ${finalParams[2]}\n${finalParams[1]} ${finalParams[3]}"
-
-
-
+            // =================================================================================
+            // for debugging of IterativeExplorer with output of paramDifferentials
 //            val origParams: Array<Int> =  arrayOf(540, 960, 530, 950, 0x80, 0x00)
 //            analyzer.computeAllParamDifferentials(origParams, 30, 0.1)
 //            var diffs: Array<Int> = arrayOf(0, 0, 0, 0, 0, 0)
