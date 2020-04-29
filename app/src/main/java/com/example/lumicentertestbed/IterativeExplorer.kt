@@ -54,23 +54,45 @@ class IterativeExplorer(private val bitmap: Bitmap) {
     }
 
     // ===================================================================================
-    fun computeParamDifferential(currParams: Array<Int>, whichParam: Int, x: Int, y: Int): Int {
-        var paramsIncremented = currParams.copyOf()
-        paramsIncremented[whichParam] += 1
+    private fun computeParamDifferential(currParams: Array<Int>, whichParam: Int, deltaTheta: Int,
+                                 x: Int, y: Int): Int {
+        val paramsIncremented = currParams.copyOf()
+        paramsIncremented[whichParam] += deltaTheta
 
-        var paramsDecremented = currParams.copyOf()
-        paramsDecremented[whichParam] -= 1
+        val paramsDecremented = currParams.copyOf()
+        paramsDecremented[whichParam] -= deltaTheta
 
-        val result = computeModel(paramsIncremented, x, y) -
-                computeModel(paramsDecremented, x, y)
+        val result = (computeModel(paramsIncremented, x, y) -
+                computeModel(paramsDecremented, x, y))/(2*deltaTheta)
         return result
     }
 
     // ===================================================================================
-    fun computeAllParamDifferentials(params: Array<Int>, stride: Int, alpha: Double,
+    fun sumParamDifferentials(currParams: Array<Int>, stride: Int, deltaTheta: Int) {
+        val params: Array<Int> = currParams.copyOf()
+        val diffAcc: Array<Double> = arrayOf(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+
+        for (x in 0 until width - 1 step stride) {
+            for (y in 0 until height - 1 step stride) {
+                // this is the expensive step
+                val pixel: Int = extractColor(bitmap.getPixel(x, y))
+                val delta: Int = pixel - computeModel(params, x, y)
+
+                for(m: Int in diffAcc.indices) {
+                    diffAcc[m] +=
+                        (delta * computeParamDifferential(params, m, deltaTheta, x, y)).toDouble()
+                }
+            }
+        }
+        Log.d(TAG, "diffAcc is: ${diffAcc[0]} ${diffAcc[1]} ${diffAcc[2]} ${diffAcc[3]} ${diffAcc[4]} ${diffAcc[5]}")
+    }
+
+    // ===================================================================================
+    private fun computeAllParamDifferentials(params: Array<Int>, stride: Int, alpha: Double,
                                      invThreshold: Int): Array<Int?> {
         var lambdaAcc: Long = 0
-        var diffAcc: Array<Double> = arrayOf(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        val diffAcc: Array<Double> = arrayOf(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
 //        Log.d(TAG, "pre-all params are: ${params[0]} ${params[1]} ${params[2]} ${params[3]} ${params[4]} ${params[5]}")
 
@@ -82,10 +104,10 @@ class IterativeExplorer(private val bitmap: Bitmap) {
                 val delta: Int = pixel - computeModel(params, x, y)
 //                Log.d(TAG, "delta: $delta")
                 lambdaAcc += delta*delta
-                val diffs: Array<Int> = arrayOf(0, 0, 0, 0, 0, 0)
+//                val diffs: Array<Int> = arrayOf(0, 0, 0, 0, 0, 0)
                 for(m in diffAcc.indices) {
-//                    diffs[m] = computeParamDifferential(params, m, x, y) // for debugging
-                    diffAcc[m] += (delta*computeParamDifferential(params, m, x, y)).toDouble()
+//                    diffs[m] = computeParamDifferential(params, m, 1, x, y) // for debugging
+                    diffAcc[m] += (delta*computeParamDifferential(params, m, 1, x, y)).toDouble()
                 }
 //                Log.d(TAG, "diffs: ${diffs[0]} ${diffs[1]} ${diffs[2]} ${diffs[3]} ${diffs[4]} ${diffs[5]}")
             }
