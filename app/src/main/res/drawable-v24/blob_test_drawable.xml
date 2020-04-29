@@ -12,8 +12,8 @@
     </item>
 
     <item
-        android:width="200px"
-        android:height="200px"
+        android:width="400px"
+        android:height="1000px"
         android:left="440px"
         android:top="860px">
         <shape android:shape="oval">

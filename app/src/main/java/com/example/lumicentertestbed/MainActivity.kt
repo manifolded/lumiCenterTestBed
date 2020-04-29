@@ -48,8 +48,21 @@ class MainActivity : AppCompatActivity() {
 
 
             val analyzer = IterativeExplorer(bitmap)
-            val params = analyzer.iterateParams(100, 0.00001, 30, 1)
-            analysisResults.text = "${params[0]} ${params[2]}\n${params[1]} ${params[3]}"
+            val finalParams = analyzer.iterateParams(100, 0.3, 10, 2, 1)
+
+            analysisResults.text = "${finalParams[0]} ${finalParams[2]}\n${finalParams[1]} ${finalParams[3]}"
+
+
+
+//            val origParams: Array<Int> =  arrayOf(540, 960, 530, 950, 0x80, 0x00)
+//            analyzer.computeAllParamDifferentials(origParams, 30, 0.1)
+//            var diffs: Array<Int> = arrayOf(0, 0, 0, 0, 0, 0)
+//            for(m in diffs.indices) {
+//                diffs[m] =  analyzer.computeParamDifferential(origParams, m, 9, 960)
+//            }
+//            Log.d(TAG, "${diffs[0]} ${diffs[2]} ${diffs[1]} ${diffs[3]} ${diffs[4]} ${diffs[5]}")
+
+
         }
     }
 
