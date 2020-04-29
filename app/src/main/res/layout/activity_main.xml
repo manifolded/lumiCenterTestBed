@@ -12,7 +12,7 @@
         android:contentDescription="@string/imageDesc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:src="@drawable/lowerleftblob01"
+        tools:src="@drawable/blob_test_drawable"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
