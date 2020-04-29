@@ -55,10 +55,14 @@ class IterativeExplorer(private val bitmap: Bitmap) {
 
     // ===================================================================================
     fun computeParamDifferential(currParams: Array<Int>, whichParam: Int, x: Int, y: Int): Int {
-        var params = currParams.copyOf()
-        params[whichParam] += 1
+        var paramsIncremented = currParams.copyOf()
+        paramsIncremented[whichParam] += 1
 
-        val result = computeModel(params, x, y) - computeModel(currParams, x, y)
+        var paramsDecremented = currParams.copyOf()
+        paramsDecremented[whichParam] -= 1
+
+        val result = computeModel(paramsIncremented, x, y) -
+                computeModel(paramsDecremented, x, y)
         return result
     }
 
@@ -68,7 +72,7 @@ class IterativeExplorer(private val bitmap: Bitmap) {
         var lambdaAcc: Long = 0
         var diffAcc: Array<Double> = arrayOf(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
-//        Log.d(TAG, "pre-all params are: ${params[0]} ${params[2]} ${params[1]} ${params[3]} ${params[4]} ${params[5]}")
+//        Log.d(TAG, "pre-all params are: ${params[0]} ${params[1]} ${params[2]} ${params[3]} ${params[4]} ${params[5]}")
 
         for (x in 0 until width - 1 step stride) {
             for (y in 0 until height - 1 step stride) {
@@ -83,11 +87,11 @@ class IterativeExplorer(private val bitmap: Bitmap) {
 //                    diffs[m] = computeParamDifferential(params, m, x, y) // for debugging
                     diffAcc[m] += (delta*computeParamDifferential(params, m, x, y)).toDouble()
                 }
-//                Log.d(TAG, "diffs: ${diffs[0]} ${diffs[2]} ${diffs[1]} ${diffs[3]} ${diffs[4]} ${diffs[5]}")
+//                Log.d(TAG, "diffs: ${diffs[0]} ${diffs[1]} ${diffs[2]} ${diffs[3]} ${diffs[4]} ${diffs[5]}")
             }
         }
 
-        Log.d(TAG, "diffAcc: ${diffAcc[0]} ${diffAcc[2]} ${diffAcc[1]} ${diffAcc[3]} ${diffAcc[4]} ${diffAcc[5]}")
+        Log.d(TAG, "diffAcc: ${diffAcc[0]} ${diffAcc[1]} ${diffAcc[2]} ${diffAcc[3]} ${diffAcc[4]} ${diffAcc[5]}")
         Log.d(TAG, "lambdaAcc: $lambdaAcc ")
 
         var xi: Array<Int?> = arrayOfNulls(6)
@@ -97,7 +101,7 @@ class IterativeExplorer(private val bitmap: Bitmap) {
                 xi[m] = ((alpha*lambdaAcc)/(diffAcc[m]*2.0)).toInt()
         }
 
-        Log.d(TAG, "xi is: ${xi[0]} ${xi[2]} ${xi[1]} ${xi[3]} ${xi[4]} ${xi[5]}")
+        Log.d(TAG, "xi is: ${xi[0]} ${xi[1]} ${xi[2]} ${xi[3]} ${xi[4]} ${xi[5]}")
         return xi
     }
 
@@ -134,7 +138,7 @@ class IterativeExplorer(private val bitmap: Bitmap) {
     private fun updateParams(currParams: Array<Int>, alpha: Double, stride: Int,
                              invThreshold: Int): Array<Int> {
         var params: Array<Int> = currParams.copyOf()
-//        Log.d(TAG, "pre-params are: ${params[0]} ${params[2]} ${params[1]} ${params[3]} ${params[4]} ${params[5]}")
+//        Log.d(TAG, "pre-params are: ${params[0]} ${params[1]} ${params[2]} ${params[3]} ${params[4]} ${params[5]}")
 
         val xi: Array<Int?> = computeAllParamDifferentials(params, stride, alpha, invThreshold)
 
@@ -142,7 +146,7 @@ class IterativeExplorer(private val bitmap: Bitmap) {
             if (xi[m] != null)
                 params[m] += xi[m]!!
 
-//        Log.d(TAG, "post-params are: ${params[0]} ${params[2]} ${params[1]} ${params[3]} ${params[4]} ${params[5]}")
+//        Log.d(TAG, "post-params are: ${params[0]} ${params[1]} ${params[2]} ${params[3]} ${params[4]} ${params[5]}")
         return params
     }
 
@@ -156,11 +160,11 @@ class IterativeExplorer(private val bitmap: Bitmap) {
         do {
             lambda = computeTotalError(params, stride)
             Log.d(TAG, "total error energy on iteration $iteration is: $lambda")
-            Log.d(TAG, "params are: ${params[0]} ${params[2]} ${params[1]} ${params[3]} ${params[4]} ${params[5]}")
+            Log.d(TAG, "params are: ${params[0]} ${params[1]} ${params[2]} ${params[3]} ${params[4]} ${params[5]}")
 
             params = updateParams(params, alpha, stride, invThreshold)
 //            params = clampParams(params, width, height)
-//            Log.d(TAG, "after delta params are: ${params[0]} ${params[2]} ${params[1]} ${params[3]} ${params[4]} ${params[5]}")
+//            Log.d(TAG, "after delta params are: ${params[0]} ${params[1]} ${params[2]} ${params[3]} ${params[4]} ${params[5]}")
             iteration++
         } while(lambda > lambdaTarget && iteration < maxIts)
 
@@ -168,14 +172,14 @@ class IterativeExplorer(private val bitmap: Bitmap) {
             Log.d(TAG, "Iteration reached maxIts.")
         }
         Log.d(TAG, "Done iterating after $iteration steps")
-        Log.d(TAG, "final params are ${params[0]} ${params[2]} ${params[1]} ${params[3]} ${params[4]} ${params[5]}")
+        Log.d(TAG, "final params are ${params[0]} ${params[1]} ${params[2]} ${params[3]} ${params[4]} ${params[5]}")
         return params
     }
 
     // ===================================================================================
     fun clampParams(inputParams: Array<Int>, width: Int, height: Int): Array<Int> {
         var params: Array<Int> = inputParams.copyOf()
-        Log.d(TAG, "pre-clamp params are: ${params[0]} ${params[2]} ${params[1]} ${params[3]} ${params[4]} ${params[5]}")
+        Log.d(TAG, "pre-clamp params are: ${params[0]} ${params[1]} ${params[2]} ${params[3]} ${params[4]} ${params[5]}")
 
         val xCenter: Int = params[0]
         val yCenter: Int = params[1]
@@ -216,7 +220,7 @@ class IterativeExplorer(private val bitmap: Bitmap) {
         if(params[5] > 0x00)
             params[5] = 0x00
 
-        Log.d(TAG, "post-clamp params are: ${params[0]} ${params[2]} ${params[1]} ${params[3]} ${params[4]} ${params[5]}")
+        Log.d(TAG, "post-clamp params are: ${params[0]} ${params[1]} ${params[2]} ${params[3]} ${params[4]} ${params[5]}")
         return params
     }
 
