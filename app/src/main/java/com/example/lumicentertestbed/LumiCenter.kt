@@ -34,6 +34,7 @@ class LumiCenter(private val bitmap: Bitmap) {
     fun computeStats(stride: Int) : Array<Long> {
         val result = Array<Long>(6 ) {0}
 
+        // sum stats over image
         for (x in 0 until width - 1 step stride) {
             for (y in 0 until height - 1 step stride) {
                 // this is the expensive step
@@ -46,9 +47,17 @@ class LumiCenter(private val bitmap: Bitmap) {
                 result[5] += pixel * x * y
             }
         }
+
+        // normalize
         for(i : Int in 1..5) {
             result[i] /= result[0]
         }
+
+        // subtract off second order piece
+        result[3] -= result[1]*result[1]
+        result[4] -= result[2]*result[2]
+        result[5] -= result[1]*result[2]
+
         return result
 
 //        result[0] = sumOverImage(stride) { _, _ -> 1 }
