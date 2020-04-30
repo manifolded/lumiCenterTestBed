@@ -12,10 +12,10 @@
     </item>
 
     <item
-        android:width="400px"
-        android:height="1000px"
-        android:left="440px"
-        android:top="860px">
+        android:width="300px"
+        android:height="200px"
+        android:left="-120px"
+        android:top="1000px">
         <shape android:shape="oval">
 <!--            <solid android:color="@android:color/white"/>-->
 <!--            <solid android:color="@android:color/holo_orange_dark"/>-->

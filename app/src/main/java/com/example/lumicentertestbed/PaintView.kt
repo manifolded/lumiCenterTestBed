@@ -6,6 +6,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.View
+import android.widget.ImageView
 
 class PaintView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
@@ -25,8 +26,8 @@ class PaintView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private var xradius = -1
     private var yradius = -1
 
-    private lateinit var bitmap: Bitmap
-    private lateinit var canvas: Canvas
+    private var bitmap: Bitmap
+    private var canvas: Canvas
     private val bitmapPaint = Paint(Paint.DITHER_FLAG)
 
     private val backgroundColor = Color.TRANSPARENT
@@ -65,7 +66,13 @@ class PaintView(context: Context, attrs: AttributeSet? = null) : View(context, a
         canvas = Canvas(bitmap)
     }
 
-    fun drawShape(x: Float, y: Float, dx: Float, dy: Float) {
+    fun drawShape(xArg: Float, yArg: Float, dxArg: Float, dyArg: Float) {
+        val lambda: Float = height / 1920.0f
+        val x: Float = lambda * xArg + (1080.0f - width)/2
+        val y: Float = lambda * yArg + (1920.0f - height)/2
+        val dx: Float = lambda * dxArg
+        val dy: Float = lambda * dyArg
+
         clear()
         currentRect = RectF(x, y, x + dx, y + dy)
         invalidate()
