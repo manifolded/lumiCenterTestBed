@@ -3,8 +3,8 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-<!--            <solid android:color="#FF4d2f00" />-->
-            <solid android:color="@android:color/black" />
+            <solid android:color="#FF4d2f00" />
+<!--            <solid android:color="@android:color/black" />-->
             <size
                 android:width="1080px"
                 android:height="1920px" />
@@ -14,8 +14,8 @@
     <item
         android:width="300px"
         android:height="200px"
-        android:left="-120px"
-        android:top="1000px">
+        android:left="120px"
+        android:top="700px">
         <shape android:shape="oval">
 <!--            <solid android:color="@android:color/white"/>-->
 <!--            <solid android:color="@android:color/holo_orange_dark"/>-->

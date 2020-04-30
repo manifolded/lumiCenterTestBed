@@ -49,15 +49,16 @@ class MainActivity : AppCompatActivity() {
             // =================================================================================
             val lumiCenter = LumiCenter(bitmap)
 
-            executor.execute {
+            executor.execute { // run analyzer on the background thread
                 lumiCenter.computeStats(30) { stats ->
-                    runOnUiThread {
-                        analysisResults.text = "%d, %d\n%d, %d"
-                            .format(stats.centerX, stats.stdX, stats.centerY, stats.stdY)
+                    runOnUiThread { // but must write output on the UI thread
+                        analysisResults.text = "%d, %d\n%d, %d\n%d | %d"
+                            .format(stats.centerX, stats.stdX, stats.centerY, stats.stdY,
+                                stats.amplitude, stats.background)
 
-                        val dx = stats.stdX * 4
+                        val dx = stats.stdX * 2.355 * 2 // 2 * FWHM = 2 * 2.355 * sigma
                         val x =  stats.centerX - (dx / 2)
-                        val dy  = stats.stdY * 4
+                        val dy  = stats.stdY * 2.355 * 2 // 2 * FWHM = 2 * 2.355 * sigma
                         val y =  stats.centerY - (dy / 2)
 
 
@@ -70,18 +71,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
-
-
-
-
-//            Log.d(TAG, "sumOnVals: ${stats[0]}")
-//            Log.d(TAG, "x-center: ${stats[1]}")
-//            Log.d(TAG, "y-center: ${stats[2]}")
-
-            // write output to TextView
-//            analysisResults.text = "${stats[1]}, ${stats[2]}"
-
 
             // =================================================================================
             // For running IterativeExplorer conventionally
