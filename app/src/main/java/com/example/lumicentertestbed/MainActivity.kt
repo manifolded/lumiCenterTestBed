@@ -54,6 +54,19 @@ class MainActivity : AppCompatActivity() {
                     runOnUiThread {
                         analysisResults.text = "%d, %d\n%d, %d"
                             .format(stats.centerX, stats.stdX, stats.centerY, stats.stdY)
+
+                        val dx = stats.stdX * 4
+                        val x =  stats.centerX - (dx / 2)
+                        val dy  = stats.stdY * 4
+                        val y =  stats.centerY - (dy / 2)
+
+
+                        paintView.drawShape(
+                            x.toFloat(),
+                            y.toFloat(),
+                            dx.toFloat(),
+                            dy.toFloat()
+                        )
                     }
                 }
             }

@@ -12,11 +12,13 @@
         android:contentDescription="@string/imageDesc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:src="@drawable/blob_test_drawable"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        tools:src="@drawable/blob_test_drawable" />
+
+    <com.example.lumicentertestbed.PaintView
+        android:id="@+id/paintView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
     <TextView
         android:id="@+id/analysisResults"
